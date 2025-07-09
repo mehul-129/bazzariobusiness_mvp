@@ -1,0 +1,1962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bazzario Business MVP - Aesthetic & Organized</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts for a nicer font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Chart.js for Analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Base Styles & Typography */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #F9FAFB; /* Very light gray background */
+      color: #1F2937; /* Dark charcoal text */
+      line-height: 1.6;
+    }
+
+    /* Utility Classes & Overrides */
+    .error-message {
+      color: #EF4444; /* Tailwind red-500 */
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+    }
+
+    /* FIX: Ensure .section.hidden truly hides the element */
+    .section.hidden {
+      display: none !important;
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background-color: #3B82F6; /* Tailwind blue-500 */
+      color: white;
+      padding: 0.875rem 1.75rem;
+      border-radius: 0.625rem;
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+      font-weight: 600;
+      display: flex; /* Use flexbox for centering content */
+      align-items: center; /* Vertically center content */
+      justify-content: center; /* Horizontally center content */
+    }
+    .btn-primary:hover {
+      background-color: #2563EB; /* Tailwind blue-600 */
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+      transform: translateY(-2px);
+    }
+    .btn-primary i { /* Icon spacing */
+      margin-right: 0.5rem;
+    }
+
+    .btn-success {
+      background-color: #22C55E; /* Tailwind green-500 */
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      transition: background-color 0.3s ease-in-out;
+      box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2);
+      font-weight: 500;
+      display: flex; /* Use flexbox for centering content */
+      align-items: center; /* Vertically center content */
+      justify-content: center; /* Horizontally center content */
+    }
+    .btn-success:hover {
+      background-color: #16A34A; /* Tailwind green-600 */
+      box-shadow: 0 4px 10px rgba(22, 163, 74, 0.3);
+    }
+    .btn-success i { /* Icon spacing */
+      margin-right: 0.5rem;
+    }
+
+    .btn-danger {
+      background-color: #EF4444; /* Tailwind red-500 */
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      transition: background-color 0.3s ease-in-out;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+      font-weight: 500;
+      display: flex; /* Use flexbox for centering content */
+      align-items: center; /* Vertically center content */
+      justify-content: center; /* Horizontally center content */
+    }
+    .btn-danger:hover {
+      background-color: #DC2626; /* Tailwind red-600 */
+      box-shadow: 0 4px 10px rgba(220, 38, 38, 0.3);
+    }
+    .btn-danger i { /* Icon spacing */
+      margin-right: 0.5rem;
+    }
+
+    /* Navigation */
+    .nav-button {
+      padding: 0.75rem 1.25rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease-in-out;
+      color: #4B5563; /* Tailwind gray-700 */
+      font-weight: 500;
+      display: flex; /* Use flexbox for centering content */
+      align-items: center; /* Vertically center content */
+      justify-content: center; /* Horizontally center content */
+    }
+    .nav-button:hover {
+      background-color: #E5E7EB; /* Tailwind gray-200 */
+      color: #1F2937; /* Tailwind gray-900 */
+      transform: translateY(-2px);
+    }
+    .nav-button i { /* Icon spacing */
+      margin-right: 0.5rem;
+    }
+
+    /* Section Headers */
+    .section-header {
+      border-bottom: 1px solid #E5E7EB; /* Tailwind gray-200 */
+      padding-bottom: 1rem;
+      margin-bottom: 2.5rem;
+      color: #1F2937; /* Tailwind gray-900 */
+      font-size: 2.5rem;
+      font-weight: 700;
+      width: 100%; /* Ensure header takes full width for centering */
+      text-align: center; /* Center header text */
+    }
+
+    /* Cards & Metrics */
+    .card-base {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid #E5E7EB; /* Tailwind gray-200 */
+    }
+    .card-base:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .analytics-metric {
+      @apply card-base text-center; /* Inherit base card styles */
+      padding: 1.75rem;
+    }
+    .analytics-metric h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #4B5563; /* Tailwind gray-700 */
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .analytics-metric h3 i {
+      margin-right: 0.5rem;
+    }
+    .analytics-metric p {
+      font-size: 2.75rem;
+      font-weight: bold;
+      color: #1F2937; /* Tailwind gray-900 */
+    }
+
+    /* Wallet Balance */
+    .wallet-balance {
+      font-size: 3.5rem;
+      font-weight: bold;
+      color: #22C55E; /* Tailwind green-500 */
+      margin-bottom: 2rem;
+    }
+
+    /* Input Fields */
+    input[type="email"], input[type="password"], input[type="number"], input[type="text"], select {
+      border: 1px solid #D1D5DB; /* Tailwind gray-300 */
+      padding: 0.875rem 1.25rem;
+      border-radius: 0.5rem;
+      color: #1F2937;
+      width: 100%;
+      transition: all 0.2s ease-in-out;
+    }
+    input::placeholder {
+      color: #9CA3AF; /* Tailwind gray-400 */
+    }
+    input:focus, select:focus {
+      border-color: #3B82F6; /* Tailwind blue-500 */
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+      outline: none;
+    }
+
+    /* Auth Page */
+    #authPage {
+      background: linear-gradient(135deg, #2563EB, #7C3AED); /* Stronger blue to purple gradient */
+    }
+    .auth-page-card {
+      background-color: rgba(255, 255, 255, 0.95); /* Slightly translucent white */
+      padding: 3rem; /* Increased padding */
+      border-radius: 1.5rem; /* More rounded corners */
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25); /* More prominent shadow */
+      width: 28rem; /* Fixed width */
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle white border */
+      backdrop-filter: blur(5px); /* Frosted glass effect */
+    }
+    .auth-page-card h2 {
+      font-size: 2.8rem; /* Even larger heading */
+      font-weight: 800; /* Extra bold */
+      margin-bottom: 2rem; /* More space below title */
+      color: #1F2937;
+    }
+    .auth-page-card input {
+      background-color: rgba(255, 255, 255, 0.8); /* Slightly more translucent inputs */
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+    .auth-page-card input:focus {
+      background-color: white; /* Solid white on focus */
+      border-color: #3B82F6;
+    }
+    .auth-page-card .btn-primary, .auth-page-card .btn-success {
+      padding: 1rem 2rem; /* Larger buttons */
+      font-size: 1.125rem; /* Larger text */
+      border-radius: 0.75rem; /* More rounded buttons */
+    }
+
+
+    /* Dashboard Centering */
+    #dashboard {
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Center content horizontally */
+      width: 100%; /* Take full width of parent */
+    }
+    .dashboard-metrics {
+      width: 100%; /* Ensure grid takes full width */
+      max-width: 1200px; /* Limit max width for aesthetics */
+      margin-left: auto;
+      margin-right: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+      gap: 1.5rem; /* Space between metrics */
+      margin-bottom: 2rem; /* Space below metrics */
+    }
+    #dashboard .section-header {
+      margin-bottom: 2rem; /* Adjust header margin for centering */
+    }
+    #dashboard h3 {
+      width: 100%; /* Ensure sub-headers take full width */
+      text-align: center; /* Center sub-header text */
+    }
+    #dashboard #lowStockAlerts, #dashboard #resellItemsList {
+      width: 100%;
+      max-width: 800px; /* Limit width for readability */
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: white;
+      box-shadow: 0 -8px 24px rgba(0,0,0,0.08);
+      padding: 1rem 0;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 20;
+    }
+    .bottom-nav .nav-button {
+      flex-direction: column;
+      display: flex;
+      align-items: center;
+      font-size: 0.85rem;
+      padding: 0.75rem 0.5rem;
+      border-radius: 0.5rem;
+      color: #4B5563;
+      font-weight: 500;
+    }
+    .bottom-nav .nav-button i {
+      margin-right: 0;
+      margin-bottom: 0.4rem;
+      font-size: 1.4rem;
+    }
+    .bottom-nav .nav-button:hover {
+      background-color: #F3F4F6; /* Tailwind gray-100 */
+      color: #1F2937;
+      transform: none; /* No translateY for bottom nav */
+    }
+
+    /* Vendor Card */
+    .vendor-card {
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid #E5E7EB; /* Tailwind gray-200 */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .vendor-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+    .vendor-image-container {
+      margin-bottom: 1.25rem;
+    }
+    .vendor-image-container img {
+      width: 96px; /* Slightly smaller */
+      height: 96px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid #3B82F6; /* Primary blue accent */
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+    }
+    .vendor-info h3 {
+      font-size: 1.375rem; /* Larger name */
+      font-weight: 700;
+      color: #1F2937;
+      margin-bottom: 0.5rem;
+    }
+    .vendor-info p {
+      font-size: 0.95rem;
+      color: #4B5563;
+      margin-bottom: 0.25rem;
+    }
+    .vendor-info .font-semibold {
+      font-weight: 600;
+      color: #374151; /* Tailwind gray-800 */
+    }
+    .vendor-info .text-sm {
+      font-size: 0.875rem;
+      color: #6B7280; /* Tailwind gray-500 */
+    }
+    .vendor-order-inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      width: 100%;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .vendor-order-inputs input,
+    .vendor-order-inputs select {
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+    }
+    .vendor-order-button {
+      width: 100%;
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      padding: 0.75rem 1.5rem;
+    }
+    .vendor-contact-wishlist {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      margin-top: 1rem;
+      gap: 0.5rem;
+    }
+    .vendor-contact-wishlist button {
+      flex: 1;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.85rem;
+      border-radius: 0.4rem;
+      transition: all 0.2s ease-in-out;
+    }
+    .vendor-contact-wishlist button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    /* Empty States */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 0;
+      color: #9CA3AF; /* Tailwind gray-400 */
+    }
+    .empty-state i {
+      font-size: 4rem; /* Larger icon */
+      margin-bottom: 1.5rem;
+      color: #D1D5DB; /* Tailwind gray-300 */
+    }
+    .empty-state p {
+      font-size: 1.25rem; /* Larger text */
+      font-weight: 500;
+    }
+
+    /* Transaction History Table */
+    .transaction-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 0.75rem; /* More space between rows */
+    }
+    .transaction-table th, .transaction-table td {
+      padding: 1.25rem 1.5rem;
+      text-align: left;
+    }
+    .transaction-table th {
+      background-color: #F3F4F6; /* Tailwind gray-100 */
+      color: #4B5563;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      border-radius: 0.75rem; /* Rounded corners for header */
+    }
+    .transaction-table th:first-child { border-top-left-radius: 0.75rem; border-bottom-left-radius: 0; }
+    .transaction-table th:last-child { border-top-right-radius: 0.75rem; border-bottom-right-radius: 0; }
+
+    .transaction-table tr {
+      background-color: white;
+      border-radius: 0.75rem; /* Rounded corners for rows */
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      transition: all 0.2s ease-in-out;
+    }
+    .transaction-table tr:hover {
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      transform: translateY(-3px);
+    }
+    .transaction-table td {
+      border-bottom: none; /* Remove individual cell borders */
+      font-size: 0.95rem;
+      color: #374151;
+    }
+    .transaction-table tr td:first-child { border-bottom-left-radius: 0.75rem; }
+    .transaction-table tr td:last-child { border-bottom-right-radius: 0.75rem; }
+
+    /* Inventory Item Card */
+    .inventory-item-card {
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid #E5E7EB; /* Tailwind gray-200 */
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .inventory-item-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+    .inventory-item-card img {
+      width: 72px; /* Slightly smaller */
+      height: 72px;
+      object-fit: cover;
+      border-radius: 0.6rem;
+      border: 1px solid #E5E7EB;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    .inventory-item-card .item-details {
+      flex-grow: 1;
+    }
+    .inventory-item-card .item-details h4 {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.2rem;
+      color: #1F2937;
+    }
+    .inventory-item-card .item-details p {
+      font-size: 0.9rem;
+      color: #6B7280;
+    }
+    .inventory-item-card .item-actions button {
+      padding: 0.5rem 0.9rem;
+      font-size: 0.8rem;
+      border-radius: 0.4rem;
+    }
+
+    /* Toggle Switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 48px; /* Wider */
+      height: 28px; /* Taller */
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #D1D5DB; /* Tailwind gray-300 */
+      transition: .4s;
+      border-radius: 28px; /* Fully rounded */
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px; /* Larger circle */
+      width: 20px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    input:checked + .slider {
+      background-color: #22C55E; /* Tailwind green-500 */
+    }
+    input:focus + .slider {
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
+      outline: none;
+    }
+    input:checked + .slider:before {
+      transform: translateX(20px); /* Move further */
+    }
+
+    /* Low Stock Alert */
+    .low-stock-alert {
+      background-color: #FFFBEB; /* Tailwind yellow-50 */
+      border: 1px solid #FCD34D; /* Tailwind yellow-300 */
+      color: #92400E; /* Tailwind yellow-800 */
+      padding: 1.25rem;
+      border-radius: 0.75rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-weight: 500;
+    }
+    .low-stock-alert i {
+      font-size: 1.75rem;
+      color: #F59E0B; /* Tailwind yellow-500 */
+    }
+
+    /* Specific text colors for consistency */
+    .text-gray-700 { color: #4B5563; }
+    .text-gray-600 { color: #6B7280; }
+    .text-gray-500 { color: #9CA3AF; }
+    .text-gray-800 { color: #374151; }
+    .text-gray-900 { color: #1F2937; }
+
+    /* Resell Image Preview */
+    #resellImagePreview {
+      border: 1px solid #D1D5DB;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    /* Order History & Resell List Items */
+    #orderHistory li, #resellItemsList li, #wishlistItems li {
+      background-color: white;
+      padding: 1.25rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid #E5E7EB; /* Tailwind gray-200 */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem; /* Add margin between list items */
+    }
+    #orderHistory li:hover, #resellItemsList li:hover, #wishlistItems li:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+    #orderHistory li:last-child, #resellItemsList li:last-child, #wishlistItems li:last-child {
+      margin-bottom: 0;
+    }
+    #orderHistory li img, #resellItemsList li img, #wishlistItems li img {
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+      border-radius: 0.5rem;
+      border: 1px solid #E5E7EB;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    #orderHistory li h4, #resellItemsList li h4, #wishlistItems li h4 {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #1F2937;
+    }
+    #orderHistory li p, #resellItemsList li p, #wishlistItems li p {
+      font-size: 0.9rem;
+      color: #4B5563;
+    }
+    #orderHistory li .text-xs, #resellItemsList li .text-xs, #wishlistItems li .text-xs {
+      font-size: 0.8rem;
+      color: #6B7280;
+    }
+  </style>
+</head>
+<body class="text-gray-800">
+
+<!-- Login/Signup -->
+<div id="authPage" class="min-h-screen flex items-center justify-center">
+  <div class="auth-page-card">
+    <img src="https://via.placeholder.com/150x150?text=Bazzario+Logo" alt="Bazzario Logo" class="mx-auto mb-8" />
+    <h2>Bazzario Business</h2>
+    <input id="email" type="email" placeholder="Email" class="w-full mb-4" required />
+    <div id="emailError" class="error-message hidden">Please enter a valid email.</div>
+    <input id="password" type="password" placeholder="Password" class="w-full mb-4" required />
+    <div id="passwordError" class="error-message hidden">Password must be at least 6 characters.</div>
+    <label class="block mb-6 text-gray-700 text-left"><input type="checkbox" id="rememberMe" class="mr-2 accent-[#3B82F6]"> Remember Me</label>
+    <button onclick="login()" class="w-full btn-primary mb-4">Login</button>
+    <button onclick="signup()" class="w-full btn-success">Sign Up</button>
+    <div id="authFeedback" class="text-green-600 mt-6 text-center font-medium"></div>
+  </div>
+</div>
+
+<!-- Main App -->
+<div id="app" class="hidden">
+  <nav class="bg-white shadow-lg p-4 flex justify-between items-center sticky top-0 z-20 backdrop-blur-md bg-opacity-80">
+    <div class="font-bold text-2xl text-[#3B82F6]">Bazzario Business</div>
+    <div class="space-x-2 flex items-center overflow-x-auto">
+      <button onclick="showSection('dashboard')" class="nav-button"><i class="fas fa-chart-pie mr-2"></i>Dashboard</button>
+      <button onclick="showSection('vendors')" class="nav-button"><i class="fas fa-store mr-2"></i>Vendors</button>
+      <button onclick="showSection('products')" class="nav-button"><i class="fas fa-box-seam mr-2"></i>Products</button>
+      <button onclick="showSection('wallet')" class="nav-button"><i class="fas fa-wallet mr-2"></i>Wallet</button>
+      <button onclick="showSection('inventory')" class="nav-button"><i class="fas fa-boxes mr-2"></i>Inventory</button>
+      <button onclick="showSection('resell')" class="nav-button"><i class="fas fa-tag mr-2"></i>Resell</button>
+      <button onclick="logout()" class="btn-danger px-4 py-2"><i class="fas fa-sign-out-alt mr-2"></i>Logout</button>
+    </div>
+  </nav>
+
+  <div class="p-6 min-h-screen max-w-screen-xl mx-auto overflow-x-hidden pb-20">
+    <!-- Dashboard Section -->
+    <div id="dashboard" class="section hidden">
+      <h2 class="section-header">Dashboard</h2>
+      <div class="dashboard-metrics mb-8">
+        <div class="analytics-metric">
+          <h3><i class="fas fa-shopping-bag text-[#3B82F6]"></i>Total Orders</h3>
+          <p><span id="dashboardTotalOrders">0</span></p>
+        </div>
+        <div class="analytics-metric">
+          <h3><i class="fas fa-wallet text-[#22C55E]"></i>Wallet Balance</h3>
+          <p>₹<span id="dashboardWalletBalance">0</span></p>
+        </div>
+        <div class="analytics-metric">
+          <h3><i class="fas fa-money-bill-wave text-[#EF4444]"></i>Total Spent</h3>
+          <p>₹<span id="dashboardTotalSpent">0</span></p>
+        </div>
+        <div class="analytics-metric">
+          <h3><i class="fas fa-boxes text-[#6366F1]"></i>Total Stock Value</h3>
+          <p>₹<span id="dashboardTotalStock">0</span></p>
+        </div>
+      </div>
+      <h3 class="mt-8 font-semibold text-2xl text-gray-800 border-b pb-3 mb-6 w-full text-center">Low Stock Alerts</h3>
+      <div id="lowStockAlerts" class="space-y-4 w-full max-w-2xl mx-auto">
+        <p class="text-gray-500 text-center">No low stock alerts.</p>
+      </div>
+      <h3 class="mt-8 font-semibold text-2xl text-gray-800 border-b pb-3 mb-6 w-full text-center">Items on Resell</h3>
+      <ul id="resellItemsList" class="space-y-4 w-full max-w-2xl mx-auto">
+        <p id="noResellItems" class="empty-state"><i class="fas fa-tags"></i><p>No items currently on resell.</p></p>
+      </ul>
+    </div>
+
+    <!-- Vendor Section -->
+    <div id="vendors" class="section hidden">
+      <h2 class="section-header">Vendors</h2>
+      <input type="text" placeholder="Search vendor..." oninput="searchVendor(this.value)" class="w-full mb-8" />
+      <div id="vendorList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-4"></div>
+    </div>
+
+    <!-- Products Section -->
+    <div id="products" class="section hidden">
+      <h2 class="section-header">My Products</h2>
+      <div class="card-base mb-8">
+        <h3 class="font-semibold text-2xl text-gray-800 border-b pb-3 mb-6">Add New Product</h3>
+        <div class="space-y-5">
+          <input type="text" id="newProductName" placeholder="Product Name" class="w-full" />
+          <input type="number" id="newProductCostPrice" placeholder="Cost Price" min="0" step="0.01" class="w-full" />
+          <input type="number" id="newProductSellPrice" placeholder="Sell Price" min="0" step="0.01" class="w-full" />
+          <input type="number" id="newProductInitialStock" placeholder="Initial Stock Quantity" min="0" class="w-full" />
+          <select id="newProductInventoryType" class="w-full">
+            <option value="physical">Physical</option>
+            <option value="digital">Digital</option>
+          </select>
+          <button onclick="addProduct()" class="btn-primary px-6 py-3 text-lg w-full">
+            <i class="fas fa-plus-circle"></i>Add Product
+          </button>
+        </div>
+      </div>
+      <h3 class="mt-8 font-semibold text-2xl text-gray-800 border-b pb-3 mb-6">Existing Products</h3>
+      <div id="productList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <p id="noProducts" class="empty-state col-span-full"><i class="fas fa-box-seam"></i><p>No products defined yet.</p></p>
+      </div>
+    </div>
+
+    <!-- Wallet Section -->
+    <div id="wallet" class="section hidden">
+      <h2 class="section-header">Wallet</h2>
+      <p class="text-gray-700 mb-4 text-lg">Current Balance:</p>
+      <p class="wallet-balance">₹<span id="walletBalance">0</span></p>
+
+      <div class="card-base mb-8">
+        <h3 class="font-semibold text-xl text-gray-800 border-b pb-3 mb-6">Manage Funds</h3>
+        <div class="flex flex-col md:flex-row items-center gap-4 mb-4">
+          <input id="addAmount" type="number" placeholder="Add Money" class="flex-grow" />
+          <button onclick="addMoney()" class="btn-success px-6 py-3 text-lg w-full md:w-auto"><i class="fas fa-plus-circle"></i>Add</button>
+        </div>
+        <div class="flex flex-col md:flex-row items-center gap-4">
+          <input id="withdrawAmount" type="number" placeholder="Withdraw Money" class="flex-grow" />
+          <button onclick="withdrawMoney()" class="btn-danger px-6 py-3 text-lg w-full md:w-auto"><i class="fas fa-minus-circle"></i>Withdraw</button>
+        </div>
+      </div>
+
+      <h3 class="mt-8 font-semibold text-2xl text-gray-800 border-b pb-3 mb-6">Transaction History</h3>
+      <div id="walletLogContainer" class="overflow-x-auto">
+        <table class="transaction-table">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Description</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="walletLog">
+            <!-- Transactions will be loaded here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Inventory Section -->
+    <div id="inventory" class="section hidden">
+      <h2 class="section-header">Inventory</h2>
+      <div id="inventoryList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <p id="noInventoryItems" class="empty-state col-span-full"><i class="fas fa-box-open"></i><p>Your inventory is empty.</p></p>
+      </div>
+    </div>
+
+    <!-- Resell Section -->
+    <div id="resell" class="section hidden">
+      <h2 class="section-header">List Item for Resell</h2>
+      <div class="card-base space-y-5">
+        <p class="text-gray-700 text-lg">Select an item from your inventory to list for resell:</p>
+        <select id="resellProductSelect" class="w-full" onchange="updateResellQuantityMax()">
+          <option value="">-- Select Product --</option>
+        </select>
+        <input type="number" id="resellQuantity" placeholder="Quantity to Resell" min="1" class="w-full" />
+        <input type="number" id="resellSellPrice" placeholder="Sell Price (per unit)" min="0" step="0.01" class="w-full" />
+        <label for="resellImage" class="block text-gray-700 font-medium mt-2">Upload Image (Optional):</label>
+        <input type="file" id="resellImage" accept="image/*" class="w-full" onchange="previewResellImage()" />
+        <img id="resellImagePreview" class="hidden w-32 h-32 object-cover rounded-md mx-auto mt-4 border border-gray-300" />
+        <button onclick="listForResell()" class="btn-primary px-6 py-3 text-lg w-full"><i class="fas fa-tag"></i>List for Resell</button>
+      </div>
+    </div>
+
+    <!-- Analytics Section -->
+    <div id="analytics" class="section hidden">
+      <h2 class="section-header">Analytics</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="analytics-metric">
+          <h3>Total Inventory Value</h3>
+          <p>₹<span id="inventoryValue">0</span></p>
+        </div>
+        <div class="analytics-metric">
+          <h3>Total Orders</h3>
+          <p><span id="totalOrders">0</span></p>
+        </div>
+        <div class="analytics-metric">
+          <h3>Total Profit</h3>
+          <p>₹<span id="totalProfit">0</span></p>
+        </div>
+      </div>
+      <h3 class="mt-8 font-semibold text-2xl text-gray-800 border-b pb-3 mb-6">Sales Trend</h3>
+      <div class="card-base">
+        <canvas id="salesChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Orders Section -->
+    <div id="orders" class="section hidden">
+      <h2 class="section-header">Order History</h2>
+      <button onclick="exportOrdersToCSV()" class="btn-primary px-4 py-2 text-base mb-6"><i class="fas fa-download"></i>Export to CSV</button>
+      <ul id="orderHistory" class="space-y-4">
+        <p id="noOrderHistory" class="empty-state"><i class="fas fa-clipboard-list"></i><p>No orders yet.</p></p>
+      </ul>
+    </div>
+
+    <!-- Wishlist Section -->
+    <div id="wishlist" class="section hidden">
+      <h2 class="section-header">My Wishlist</h2>
+      <ul id="wishlistItems" class="space-y-4">
+        <p id="noWishlistItems" class="empty-state"><i class="fas fa-heart-broken"></i><p>Your wishlist is empty.</p></p>
+      </ul>
+    </div>
+
+    <!-- Settings Section -->
+    <div id="settings" class="section hidden">
+      <h2 class="section-header">Settings</h2>
+
+      <!-- Business Profile -->
+      <div class="card-base mb-8">
+        <h3 class="font-semibold text-2xl text-gray-800 border-b pb-3 mb-6">Business Profile</h3>
+        <div class="space-y-5">
+          <input type="text" id="bizName" placeholder="Business Name" class="w-full" />
+          <input type="text" id="bizGST" placeholder="GSTIN" class="w-full" />
+          <input type="text" id="bizContact" placeholder="Contact Number" class="w-full" />
+          <button onclick="saveProfile()" class="btn-primary px-6 py-3 text-lg w-full"><i class="fas fa-save"></i>Save Profile</button>
+        </div>
+      </div>
+
+      <!-- Account Management -->
+      <div class="card-base mb-8">
+        <h3 class="font-semibold text-2xl text-gray-800 border-b pb-3 mb-6">Account Management</h3>
+        <div class="space-y-5">
+          <input type="password" id="currentPassword" placeholder="Current Password" class="w-full" />
+          <input type="password" id="newPassword" placeholder="New Password" class="w-full" />
+          <input type="password" id="confirmNewPassword" placeholder="Confirm New Password" class="w-full" />
+          <button onclick="changePassword()" class="btn-primary px-6 py-3 text-lg w-full"><i class="fas fa-key"></i>Change Password</button>
+          <button onclick="deleteAccount()" class="btn-danger px-6 py-3 text-lg w-full"><i class="fas fa-user-slash"></i>Delete Account</button>
+        </div>
+      </div>
+
+      <!-- Notifications -->
+      <div class="card-base mb-8">
+        <h3 class="font-semibold text-2xl text-gray-800 border-b pb-3 mb-6">Notifications</h3>
+        <div class="space-y-5">
+          <div class="flex justify-between items-center">
+            <span class="text-lg text-gray-700">Order Updates</span>
+            <label class="switch">
+              <input type="checkbox" id="notifOrders" onchange="toggleNotification('orders')">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-lg text-gray-700">Resell Activity</span>
+            <label class="switch">
+              <input type="checkbox" id="notifResell" onchange="toggleNotification('resell')">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-lg text-gray-700">Promotions & Offers</span>
+            <label class="switch">
+              <input type="checkbox" id="notifPromotions" onchange="toggleNotification('promotions')">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Help & Support -->
+      <div class="card-base">
+        <h3 class="font-semibold text-2xl text-gray-800 border-b pb-3 mb-6">Help & Support</h3>
+        <div class="space-y-5">
+          <button onclick="showFAQ()" class="btn-primary px-6 py-3 text-lg w-full"><i class="fas fa-question-circle"></i>Frequently Asked Questions</button>
+          <button onclick="contactSupport()" class="btn-primary px-6 py-3 text-lg w-full"><i class="fas fa-headset"></i>Contact Support</button>
+          <p class="text-center text-gray-600 text-sm mt-6">Bazzario Business MVP v1.0</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <div class="bottom-nav">
+    <button onclick="showSection('analytics')" class="nav-button"><i class="fas fa-chart-line"></i>Analytics</button>
+    <button onclick="showSection('orders')" class="nav-button"><i class="fas fa-history"></i>Order History</button>
+    <button onclick="showSection('wishlist')" class="nav-button"><i class="fas fa-heart"></i>Wishlist</button>
+    <button onclick="showSection('settings')" class="nav-button"><i class="fas fa-cog"></i>Settings</button>
+  </div>
+</div>
+
+<script>
+const vendors = [
+  { name: "Vendor A", product: "T-Shirt", price: 200, rating: 4.5, location: "Delhi", gstin: "GST1234", img: "https://via.placeholder.com/100/FF5733/FFFFFF?text=VA", contact: "vendorA@example.com" },
+  { name: "Vendor B", product: "Shoes", price: 800, rating: 4.2, location: "Mumbai", gstin: "GST5678", img: "https://via.placeholder.com/100/33FF57/FFFFFF?text=VB", contact: "vendorB@example.com" },
+  { name: "Vendor C", product: "Cap", price: 100, rating: 4.0, location: "Jaipur", gstin: "GST9101", img: "https://via.placeholder.com/100/3357FF/FFFFFF?text=VC", contact: "vendorC@example.com" }
+];
+
+const emailInput = document.getElementById('email');
+const passwordInput = document.getElementById('password');
+const authPage = document.getElementById('authPage');
+const app = document.getElementById('app');
+const authFeedback = document.getElementById('authFeedback');
+
+let salesChartInstance = null; // To store the Chart.js instance
+
+function validateEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(String(email).toLowerCase());
+}
+
+function validatePassword(password) {
+  return password.length >= 6;
+}
+
+function signup() {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
+  const emailError = document.getElementById('emailError');
+  const passwordError = document.getElementById('passwordError');
+
+  emailError.classList.add('hidden');
+  passwordError.classList.add('hidden');
+  authFeedback.innerText = '';
+
+  if (!validateEmail(email)) {
+    emailError.classList.remove('hidden');
+    return;
+  }
+  if (!validatePassword(password)) {
+    passwordError.classList.remove('hidden');
+    return;
+  }
+
+  if (localStorage.getItem(email)) {
+    authFeedback.innerText = 'User already exists. Please login.';
+    authFeedback.style.color = 'orange';
+    return;
+  }
+
+  // Initialize user data with an empty wishlist, resellItems array, and totalSpent
+  // Added 'products' object for user-defined products
+  localStorage.setItem(email, JSON.stringify({ password, wallet: 0, inventory: {}, orders: [], log: [], profit: 0, wishlist: [], resellItems: [], totalSpent: 0, products: {} }));
+  authFeedback.innerText = 'Signup successful! You can now log in.';
+  authFeedback.style.color = '#22C55E'; /* Use new success green */
+  emailInput.value = '';
+  passwordInput.value = '';
+}
+
+function login() {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
+  const user = JSON.parse(localStorage.getItem(email));
+  const emailError = document.getElementById('emailError');
+  const passwordError = document.getElementById('passwordError');
+
+  emailError.classList.add('hidden');
+  passwordError.classList.add('hidden');
+  authFeedback.innerText = '';
+  authFeedback.style.color = '#EF4444'; /* Use new danger red */
+
+  if (!validateEmail(email)) {
+    emailError.classList.remove('hidden');
+    return;
+  }
+  if (!validatePassword(password)) {
+    passwordError.classList.remove('hidden');
+    return;
+  }
+
+  if (user && user.password === password) {
+    localStorage.setItem('currentUser', email);
+    if (document.getElementById('rememberMe').checked) {
+      localStorage.setItem('remember', 'true');
+    } else {
+      localStorage.removeItem('remember');
+    }
+    loadApp();
+  } else {
+    authFeedback.innerText = 'Invalid email or password.';
+  }
+}
+
+function logout() {
+  localStorage.removeItem('currentUser');
+  localStorage.removeItem('remember');
+  location.reload();
+}
+
+function loadApp() {
+  authPage.classList.add('hidden');
+  app.classList.remove('hidden');
+  showSection('dashboard'); // Show dashboard by default
+  updateAll();
+}
+
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  if (id === 'wishlist') {
+    updateWishlist();
+  } else if (id === 'dashboard') {
+    updateDashboard(); // Update dashboard when its section is shown
+  } else if (id === 'inventory') {
+    updateInventory(); // Ensure inventory is updated when shown
+  } else if (id === 'resell') { // New: Populate resell dropdown when section is shown
+    populateResellDropdown();
+    updateResellQuantityMax(); // Call this immediately after populating
+  } else if (id === 'products') {
+    loadProducts();
+  } else if (id === 'analytics') {
+    updateAnalytics(); // Ensure analytics chart is updated
+  }
+}
+
+function getUser () {
+  const currentEmail = localStorage.getItem('currentUser');
+  if (currentEmail) {
+    return JSON.parse(localStorage.getItem(currentEmail));
+  }
+  return null;
+}
+
+function saveUser (data) {
+  const currentEmail = localStorage.getItem('currentUser');
+  if (currentEmail) {
+    localStorage.setItem(currentEmail, JSON.stringify(data));
+  }
+}
+
+function updateWallet() {
+  const user = getUser ();
+  if (user) {
+    document.getElementById('walletBalance').innerText = user.wallet;
+    const logBody = document.getElementById('walletLog');
+    logBody.innerHTML = ''; // Clear previous content
+
+    if (user.log.length === 0) {
+      logBody.innerHTML = '<tr><td colspan="4" class="text-center text-gray-500 py-4">No transactions yet.</td></tr>';
+      return;
+    }
+
+    user.log.forEach(entry => {
+      const type = entry.includes('added') ? 'Add' : (entry.includes('withdrawn') ? 'Withdraw' : 'Order');
+      const amountMatch = entry.match(/₹(\d+(\.\d+)?)/);
+      const amount = amountMatch ? parseFloat(amountMatch[1]).toFixed(2) : 'N/A';
+      const dateMatch = entry.match(/\((.*?)\)/);
+      const date = dateMatch ? dateMatch[1] : 'N/A';
+      const description = entry.replace(/ \(.*?\)/, ''); // Remove date part for description
+
+      let icon = '';
+      let amountColor = '';
+      if (type === 'Add') {
+        icon = '<i class="fas fa-plus-circle text-green-500"></i>';
+        amountColor = 'text-green-600';
+      } else if (type === 'Withdraw') {
+        icon = '<i class="fas fa-minus-circle text-red-500"></i>';
+        amountColor = 'text-red-600';
+      } else if (type === 'Order') {
+        icon = '<i class="fas fa-shopping-cart text-blue-500"></i>';
+        amountColor = 'text-gray-800';
+      }
+
+      const row = `
+        <tr>
+          <td><span class="flex items-center gap-2">${icon}${type}</span></td>
+          <td class="${amountColor}">₹${amount}</td>
+          <td>${description}</td>
+          <td>${date}</td>
+        </tr>
+      `;
+      logBody.innerHTML += row;
+    });
+  }
+}
+
+function addMoney() {
+  const amt = parseInt(document.getElementById('addAmount').value);
+  if (isNaN(amt) || amt <= 0) {
+    alert('Please enter a valid amount to add.');
+    return;
+  }
+  const user = getUser ();
+  if (user) {
+    user.wallet += amt;
+    user.log.unshift(`+₹${amt} added to wallet (${new Date().toLocaleString()})`); // Add to beginning
+    saveUser (user);
+    updateWallet();
+    document.getElementById('addAmount').value = '';
+  }
+}
+
+function withdrawMoney() {
+  const amt = parseInt(document.getElementById('withdrawAmount').value);
+  if (isNaN(amt) || amt <= 0) {
+    alert('Please enter a valid amount to withdraw.');
+    return;
+  }
+  const user = getUser();
+  if (user) {
+    if (user.wallet < amt) {
+      alert('Insufficient balance in your wallet.');
+      return;
+    }
+    user.wallet -= amt;
+    user.log.unshift(`-₹${amt} withdrawn from wallet (${new Date().toLocaleString()})`); // Add to beginning
+    saveUser(user);
+    updateWallet();
+    document.getElementById('withdrawAmount').value = '';
+    alert(`₹${amt} successfully withdrawn.`);
+  }
+}
+
+function updateInventory() {
+  const invList = document.getElementById('inventoryList');
+  invList.innerHTML = ''; // Clear previous content
+  const user = getUser ();
+  if (user) {
+    if (Object.keys(user.inventory).length === 0) {
+      invList.innerHTML = '<p id="noInventoryItems" class="empty-state col-span-full"><i class="fas fa-box-open"></i><p>Your inventory is empty.</p></p>';
+      return;
+    }
+    // Remove the empty state message if there are items
+    const noInventoryItems = document.getElementById('noInventoryItems');
+    if (noInventoryItems) noInventoryItems.remove();
+
+    for (const product in user.inventory) {
+      const productData = user.inventory[product];
+      // Determine product image: first check user-defined products, then vendors, then generic
+      let productImage = 'https://via.placeholder.com/80/CCCCCC/FFFFFF?text=Item';
+      if (user.products && user.products[product] && user.products[product].image) {
+        productImage = user.products[product].image;
+      } else {
+        const vendor = vendors.find(v => v.product === product);
+        if (vendor) productImage = vendor.img;
+      }
+
+      for (const type in productData) {
+        if (productData[type] > 0) {
+          const typeIcon = type === 'physical' ? '<i class="fas fa-cube mr-1"></i>' : '<i class="fas fa-cloud mr-1"></i>';
+          const div = document.createElement('div');
+          div.className = 'inventory-item-card';
+          div.innerHTML = `
+            <img src="${productImage}" alt="${product}" />
+            <div class="item-details">
+              <h4>${product}</h4>
+              <p>${typeIcon} ${type.charAt(0).toUpperCase() + type.slice(1)}: ${productData[type]}</p>
+            </div>
+            <div class="item-actions">
+              <button onclick="openResellSectionAndSelect('${product}', '${type}')" class="bg-[#6366F1] text-white px-3 py-1 rounded-md hover:bg-[#4F46E5] transition-colors duration-200 text-sm">
+                <i class="fas fa-tag mr-1"></i> Resell
+              </button>
+            </div>
+          `;
+          invList.appendChild(div);
+        }
+      }
+    }
+  }
+}
+
+// New function to open resell section and pre-select an item
+function openResellSectionAndSelect(productName, inventoryType) {
+  showSection('resell');
+  const select = document.getElementById('resellProductSelect');
+  const valueToSelect = `${productName}|${inventoryType}`;
+  // Find the option and select it
+  for (let i = 0; i < select.options.length; i++) {
+    if (select.options[i].value === valueToSelect) {
+      select.selectedIndex = i;
+      break;
+    }
+  }
+  // Manually trigger the onchange event to update max quantity
+  updateResellQuantityMax();
+  // Optionally, clear quantity and price fields
+  document.getElementById('resellQuantity').value = '';
+  document.getElementById('resellSellPrice').value = '';
+  document.getElementById('resellImage').value = ''; // Clear image input
+  document.getElementById('resellImagePreview').classList.add('hidden'); // Hide preview
+}
+
+// Function to preview selected image for resell
+function previewResellImage() {
+  const fileInput = document.getElementById('resellImage');
+  const preview = document.getElementById('resellImagePreview');
+  const file = fileInput.files[0];
+  const reader = new FileReader();
+
+  if (file) {
+    reader.onload = function(e) {
+      preview.src = e.target.result;
+      preview.classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+  } else {
+    preview.src = '';
+    preview.classList.add('hidden');
+  }
+}
+
+
+// Function to populate the resell dropdown with current inventory items
+function populateResellDropdown() {
+  const user = getUser();
+  const select = document.getElementById('resellProductSelect');
+  select.innerHTML = '<option value="">-- Select Product --</option>'; // Reset dropdown
+
+  if (user) {
+    // Add vendor products
+    for (const product in user.inventory) {
+      const productData = user.inventory[product];
+      // Check if this product is from a vendor
+      const isVendorProduct = vendors.some(v => v.product === product);
+      if (isVendorProduct) {
+        for (const type in productData) {
+          if (productData[type] > 0) {
+            const option = document.createElement('option');
+            option.value = `${product}|${type}|vendor`; // Add 'vendor' flag
+            option.innerText = `${product} (Vendor - ${type.charAt(0).toUpperCase() + type.slice(1)} - ${productData[type]} in stock)`;
+            select.appendChild(option);
+          }
+        }
+      }
+    }
+
+    // Add user-defined products
+    for (const product in user.products) {
+      const productData = user.inventory[product]; // Get current stock from inventory
+      if (productData) { // Only if there's stock
+        for (const type in productData) {
+          if (productData[type] > 0) {
+            const option = document.createElement('option');
+            option.value = `${product}|${type}|user`; // Add 'user' flag
+            option.innerText = `${product} (My Product - ${type.charAt(0).toUpperCase() + type.slice(1)} - ${productData[type]} in stock)`;
+            select.appendChild(option);
+          }
+        }
+      }
+    }
+  }
+  // Reset quantity max and placeholder when dropdown is repopulated
+  document.getElementById('resellQuantity').max = '';
+  document.getElementById('resellQuantity').placeholder = 'Quantity to Resell';
+}
+
+// New function to update the max quantity for resell based on selected product
+function updateResellQuantityMax() {
+  const user = getUser();
+  const select = document.getElementById('resellProductSelect');
+  const qtyInput = document.getElementById('resellQuantity');
+  const selectedProductValue = select.value;
+
+  if (selectedProductValue && user) {
+    const [productName, inventoryType, source] = selectedProductValue.split('|');
+    const availableQty = user.inventory[productName]?.[inventoryType] || 0;
+    qtyInput.max = availableQty;
+    qtyInput.placeholder = `Quantity to Resell (Max: ${availableQty})`;
+  } else {
+    qtyInput.max = '';
+    qtyInput.placeholder = 'Quantity to Resell';
+  }
+  qtyInput.value = ''; // Clear previous quantity
+}
+
+
+// Function to handle listing an item for resell from the Resell section
+function listForResell() {
+  const user = getUser();
+  if (!user) {
+    alert('Please log in to list items for resell.');
+    return;
+  }
+
+  const selectedProductValue = document.getElementById('resellProductSelect').value;
+  if (!selectedProductValue) {
+    alert('Please select a product from your inventory.');
+    return;
+  }
+
+  const [productName, inventoryType, source] = selectedProductValue.split('|');
+  const qtyToResell = parseInt(document.getElementById('resellQuantity').value);
+  const resellSellPrice = parseFloat(document.getElementById('resellSellPrice').value);
+  const resellImageFile = document.getElementById('resellImage').files[0];
+  let resellImageData = '';
+
+  const currentQty = user.inventory[productName]?.[inventoryType] || 0;
+
+  if (isNaN(qtyToResell) || qtyToResell <= 0 || qtyToResell > currentQty) {
+    alert(`Please enter a valid quantity to resell (Max: ${currentQty}).`);
+    return;
+  }
+  if (isNaN(resellSellPrice) || resellSellPrice <= 0) {
+    alert('Please enter a valid sell price.');
+    return;
+  }
+
+  const processResell = () => {
+    // Deduct from inventory
+    user.inventory[productName][inventoryType] -= qtyToResell;
+    if (user.inventory[productName][inventoryType] === 0) {
+      delete user.inventory[productName][inventoryType];
+      if (Object.keys(user.inventory[productName]).length === 0) {
+        delete user.inventory[productName]; // Remove product if all types are zero
+      }
+    }
+
+    // Add to resellItems array
+    user.resellItems = user.resellItems || []; // Ensure array exists
+    user.resellItems.push({
+      product: productName,
+      type: inventoryType,
+      qty: qtyToResell,
+      resellPrice: resellSellPrice,
+      date: new Date().toLocaleString(),
+      image: resellImageData, // Store image data
+      source: source // Store source (vendor/user)
+    });
+
+    saveUser(user);
+    updateAll(); // Refresh inventory and dashboard
+    alert(`${qtyToResell} ${inventoryType} ${productName}(s) listed for resell at ₹${resellSellPrice} each.`);
+
+    // Clear form fields
+    document.getElementById('resellProductSelect').value = '';
+    document.getElementById('resellQuantity').value = '';
+    document.getElementById('resellSellPrice').value = '';
+    document.getElementById('resellImage').value = ''; // Clear image input
+    document.getElementById('resellImagePreview').classList.add('hidden'); // Hide preview
+    updateResellQuantityMax(); // Reset max quantity and placeholder after listing
+  };
+
+  if (resellImageFile) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      resellImageData = e.target.result;
+      processResell();
+    };
+    reader.readAsDataURL(resellImageFile);
+  } else {
+    processResell();
+  }
+}
+
+
+function updateAnalytics() {
+  const user = getUser ();
+  if (user) {
+    document.getElementById('totalOrders').innerText = user.orders.length;
+    document.getElementById('totalProfit').innerText = user.profit;
+    let value = 0;
+    for (let product in user.inventory) {
+      const productData = user.inventory[product];
+      // For analytics, if a product was uploaded, we need its price.
+      // For simplicity, we'll assume a default price or that it's in the 'vendors' list.
+      // A more robust system would store product details (including cost) with the inventory.
+      let productCost = 0;
+      if (user.products && user.products[product]) {
+        productCost = user.products[product].costPrice;
+      } else {
+        const vendor = vendors.find(v => v.product === product);
+        if (vendor) productCost = vendor.price;
+      }
+
+      if (productCost) {
+        for (const type in productData) {
+          value += productCost * productData[type];
+        }
+      }
+    }
+    document.getElementById('inventoryValue').innerText = value;
+
+    // Chart.js for Sales Trend
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    const monthlySales = {};
+    user.orders.forEach(order => {
+      const date = new Date(order.date);
+      const monthYear = `${date.toLocaleString('default', { month: 'short' })}-${date.getFullYear()}`;
+      monthlySales[monthYear] = (monthlySales[monthYear] || 0) + order.total;
+    });
+
+    const labels = Object.keys(monthlySales);
+    const data = Object.values(monthlySales);
+
+    if (salesChartInstance) {
+      salesChartInstance.destroy(); // Destroy previous chart instance
+    }
+
+    salesChartInstance = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Monthly Sales (₹)',
+          data: data,
+          backgroundColor: '#3B82F6', /* Tailwind blue-500 */
+          borderColor: '#2563EB', /* Tailwind blue-600 */
+          borderWidth: 1,
+          borderRadius: 4, /* Rounded bars */
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false, /* Allow custom height */
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: {
+              color: '#E5E7EB' /* Lighter grid lines */
+            },
+            ticks: {
+              color: '#4B5563' /* Darker tick labels */
+            },
+            title: {
+              display: true,
+              text: 'Sales Amount (₹)',
+              color: '#374151'
+            }
+          },
+          x: {
+            grid: {
+              display: false /* No vertical grid lines */
+            },
+            ticks: {
+              color: '#4B5563'
+            },
+            title: {
+              display: true,
+              text: 'Month',
+              color: '#374151'
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+            labels: {
+              color: '#374151'
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                let label = context.dataset.label || '';
+                if (label) {
+                  label += ': ';
+                }
+                if (context.parsed.y !== null) {
+                  label += new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(context.parsed.y);
+                }
+                return label;
+              }
+            },
+            backgroundColor: '#1F2937', /* Dark tooltip background */
+            titleColor: '#F9FAFB',
+            bodyColor: '#F9FAFB',
+            borderColor: '#4B5563',
+            borderWidth: 1,
+            borderRadius: 6,
+          }
+        }
+      }
+    });
+  }
+}
+
+function updateOrders() {
+  const user = getUser ();
+  if (user) {
+    const list = document.getElementById('orderHistory');
+    list.innerHTML = ''; // Clear previous content
+    if (user.orders.length === 0) {
+      list.innerHTML = '<p id="noOrderHistory" class="empty-state"><i class="fas fa-clipboard-list"></i><p>No orders yet.</p></p>';
+      return;
+    }
+    user.orders.forEach(o => {
+      const listItem = document.createElement('li');
+      // Determine product image: first check user-defined products, then vendors, then generic
+      let productImage = 'https://via.placeholder.com/80/CCCCCC/FFFFFF?text=Item';
+      if (user.products && user.products[o.product] && user.products[o.product].image) {
+        productImage = user.products[o.product].image;
+      } else {
+        const vendor = vendors.find(v => v.product === o.product);
+        if (vendor) productImage = vendor.img;
+      }
+
+      listItem.innerHTML = `
+        <div class="flex items-center gap-4">
+          <img src="${productImage}" alt="${o.product}" />
+          <div>
+            <h4 class="font-bold text-lg">${o.qty} × ${o.product}</h4>
+            <p class="text-gray-700">from ${o.vendor} - ₹${o.total} <span class="text-sm text-gray-500">(${o.inventoryType})</span></p>
+            <p class="text-xs text-gray-600">${o.date}</p>
+          </div>
+        </div>
+      `;
+      list.appendChild(listItem);
+    });
+  }
+}
+
+function exportOrdersToCSV() {
+  const user = getUser();
+  if (!user || user.orders.length === 0) {
+    alert('No orders to export.');
+    return;
+  }
+
+  let csvContent = "data:text/csv;charset=utf-8,";
+  csvContent += "Vendor,Product,Quantity,Total,Date,InventoryType\n"; // CSV Header
+
+  user.orders.forEach(order => {
+    const row = [
+      order.vendor,
+      order.product,
+      order.qty,
+      order.total,
+      order.date,
+      order.inventoryType
+    ].map(item => `"${item}"`).join(","); // Wrap each item in quotes to handle commas
+    csvContent += row + "\n";
+  });
+
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "bazzario_order_history.csv");
+  document.body.appendChild(link); // Required for Firefox
+  link.click();
+  document.body.removeChild(link); // Clean up
+  alert('Order history exported to CSV!');
+}
+
+
+function updateWishlist() {
+  const user = getUser();
+  const wishlistItemsList = document.getElementById('wishlistItems');
+  wishlistItemsList.innerHTML = ''; // Clear previous content
+
+  if (user && user.wishlist && user.wishlist.length > 0) {
+    user.wishlist.forEach((item, index) => {
+      const listItem = document.createElement('li');
+      // Determine product image: first check user-defined products, then vendors, then generic
+      let productImage = 'https://via.placeholder.com/80/CCCCCC/FFFFFF?text=Item';
+      if (user.products && user.products[item.product] && user.products[item.product].image) {
+        productImage = user.products[item.product].image;
+      } else {
+        const vendor = vendors.find(v => v.product === item.product);
+        if (vendor) productImage = vendor.img;
+      }
+
+      listItem.innerHTML = `
+        <div class="flex items-center gap-4">
+          <img src="${productImage}" alt="${item.product}" />
+          <div>
+            <h4 class="font-bold text-lg">${item.product} from ${item.vendor}</h4>
+            <p class="text-gray-700">Price: ₹${item.price} | Location: ${item.location}</p>
+          </div>
+        </div>
+        <button onclick="removeFromWishlist(${index})" class="text-red-500 hover:text-red-700 transition-colors duration-200">
+          <i class="fas fa-trash-alt"></i> Remove
+        </button>
+      `;
+      wishlistItemsList.appendChild(listItem);
+    });
+  } else {
+    wishlistItemsList.innerHTML = '<p id="noWishlistItems" class="empty-state"><i class="fas fa-heart-broken"></i><p>Your wishlist is empty.</p></p>';
+  }
+}
+
+function addToWishlist(vendorIndex) {
+  const user = getUser();
+  if (!user) {
+    alert('Please log in to add items to your wishlist.');
+    return;
+  }
+  const vendor = vendors[vendorIndex];
+  const isAlreadyInWishlist = user.wishlist.some(item => item.product === vendor.product && item.vendor === vendor.name);
+  if (isAlreadyInWishlist) {
+    alert(`${vendor.product} from ${vendor.name} is already in your wishlist!`);
+    return;
+  }
+
+  user.wishlist.push({
+    vendor: vendor.name,
+    product: vendor.product,
+    price: vendor.price,
+    location: vendor.location
+  });
+  saveUser(user);
+  alert(`${vendor.product} from ${vendor.name} added to wishlist!`);
+}
+
+function removeFromWishlist(itemIndex) {
+  const user = getUser();
+  if (!user) return;
+
+  if (confirm('Are you sure you want to remove this item from your wishlist?')) {
+    user.wishlist.splice(itemIndex, 1);
+    saveUser(user);
+    updateWishlist();
+    alert('Item removed from wishlist.');
+  }
+}
+
+function contactVendor(vendorIndex) {
+  const vendor = vendors[vendorIndex];
+  alert(`Simulating contact with ${vendor.name}. You can reach them at: ${vendor.contact || 'N/A'}`);
+}
+
+function updateDashboard() {
+  const user = getUser();
+  if (user) {
+    document.getElementById('dashboardTotalOrders').innerText = user.orders.length;
+    document.getElementById('dashboardWalletBalance').innerText = user.wallet;
+
+    document.getElementById('dashboardTotalSpent').innerText = user.totalSpent || 0;
+
+    let totalStockValue = 0;
+    for (let product in user.inventory) {
+      const productData = user.inventory[product];
+      // For analytics, if a product was uploaded, we need its price.
+      // For simplicity, we'll assume a default price or that it's in the 'vendors' list.
+      // A more robust system would store product details (including cost) with the inventory.
+      let productCost = 0;
+      if (user.products && user.products[product]) {
+        productCost = user.products[product].costPrice;
+      } else {
+        const vendor = vendors.find(v => v.product === product);
+        if (vendor) productCost = vendor.price;
+      }
+
+      if (productCost) {
+        for (const type in productData) {
+          value += productCost * productData[type];
+        }
+      }
+    }
+    document.getElementById('dashboardTotalStock').innerText = totalStockValue;
+
+    // Low Stock Alerts
+    const lowStockAlertsDiv = document.getElementById('lowStockAlerts');
+    lowStockAlertsDiv.innerHTML = '';
+    let hasLowStock = false;
+    const LOW_STOCK_THRESHOLD = 5; // Define your threshold
+
+    for (const product in user.inventory) {
+      const productData = user.inventory[product];
+      for (const type in productData) {
+        if (productData[type] > 0 && productData[type] <= LOW_STOCK_THRESHOLD) {
+          hasLowStock = true;
+          const alertDiv = document.createElement('div');
+          alertDiv.className = 'low-stock-alert';
+          alertDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i>
+                                <span><strong>${product} (${type.charAt(0).toUpperCase() + type.slice(1)})</strong> is low on stock! Only ${productData[type]} left.</span>`;
+          lowStockAlertsDiv.appendChild(alertDiv);
+        }
+      }
+    }
+    if (!hasLowStock) {
+      lowStockAlertsDiv.innerHTML = '<p class="text-gray-500 text-center">No low stock alerts.</p>';
+    }
+
+
+    const resellItemsList = document.getElementById('resellItemsList');
+    resellItemsList.innerHTML = ''; // Clear previous content
+
+    if (user.resellItems && user.resellItems.length > 0) {
+      user.resellItems.forEach((item, index) => {
+        const listItem = document.createElement('li');
+        const itemImage = item.image || 'https://via.placeholder.com/80/CCCCCC/FFFFFF?text=Resell'; // Use stored image or default
+
+        listItem.innerHTML = `
+          <div class="flex items-center gap-4">
+            <img src="${itemImage}" alt="${item.product}" />
+            <div>
+              <h4 class="font-bold text-lg">${item.qty} x ${item.product} (${item.type})</h4>
+              <p class="text-gray-700">Resell Price: ₹${item.resellPrice} each</p>
+              <p class="text-xs text-gray-600">Listed on: ${item.date}</p>
+            </div>
+          </div>
+          <button onclick="removeResellItem(${index})" class="text-red-500 hover:text-red-700 transition-colors duration-200">
+            <i class="fas fa-times-circle"></i> Remove
+          </button>
+        `;
+        resellItemsList.appendChild(listItem);
+      });
+    } else {
+      resellItemsList.innerHTML = '<p id="noResellItems" class="empty-state"><i class="fas fa-tags"></i><p>No items currently on resell.</p></p>';
+    }
+  }
+}
+
+function removeResellItem(itemIndex) {
+  const user = getUser();
+  if (!user || !user.resellItems) return;
+
+  if (confirm('Are you sure you want to remove this item from resell and return it to your inventory?')) {
+    const itemToReturn = user.resellItems[itemIndex];
+
+    // Add back to inventory
+    user.inventory[itemToReturn.product] = user.inventory[itemToReturn.product] || {};
+    user.inventory[itemToReturn.product][itemToReturn.type] = (user.inventory[itemToReturn.product][itemToReturn.type] || 0) + itemToReturn.qty;
+
+    // Remove from resellItems
+    user.resellItems.splice(itemIndex, 1);
+
+    saveUser(user);
+    updateAll();
+    alert(`${itemToReturn.qty} ${itemToReturn.type} ${itemToReturn.product}(s) returned to inventory.`);
+  }
+}
+
+
+function updateAll() {
+  loadVendors();
+  loadProducts(); // Load user-defined products
+  updateWallet();
+  updateInventory();
+  updateAnalytics();
+  updateOrders();
+  updateDashboard();
+}
+
+function loadVendors(filter = '') {
+  const list = document.getElementById('vendorList');
+  list.innerHTML = '';
+  vendors.filter(v => v.name.toLowerCase().includes(filter.toLowerCase())).forEach((v, i) => {
+    const div = document.createElement('div');
+    div.className = 'vendor-card';
+    div.innerHTML = `
+      <div class="vendor-image-container">
+        <img src="${v.img}" alt="${v.name}" />
+      </div>
+      <div class="vendor-info">
+        <h3 class="font-bold text-xl text-gray-900 mb-1">${v.name}</h3>
+        <p class="text-gray-700 mb-1"><span class="font-semibold">${v.product}</span> - ₹${v.price}</p>
+        <p class="text-gray-600 text-sm mb-2"><i class="fas fa-star text-yellow-400"></i> ${v.rating} | <i class="fas fa-map-marker-alt text-red-400"></i> ${v.location}</p>
+        <p class="text-xs text-gray-500">GSTIN: ${v.gstin}</p>
+
+        <div class="vendor-order-inputs">
+          <input type="number" id="qty-${i}" placeholder="Qty" min="1" />
+          <select id="inventoryType-${i}">
+            <option value="physical">Physical</option>
+            <option value="digital">Digital</option>
+          </select>
+          <button onclick="orderVendor(${i})" class="btn-primary vendor-order-button"><i class="fas fa-shopping-cart"></i>Order</button>
+        </div>
+        <div class="vendor-contact-wishlist">
+          <button onclick="contactVendor(${i})" class="bg-gray-200 text-gray-700 px-3 py-2 rounded-md hover:bg-gray-300 transition-colors duration-200 text-sm">
+            <i class="fas fa-envelope mr-1"></i> Contact
+          </button>
+          <button onclick="addToWishlist(${i})" class="bg-pink-100 text-pink-600 px-3 py-2 rounded-md hover:bg-pink-200 transition-colors duration-200 text-sm">
+            <i class="fas fa-heart mr-1"></i> Wishlist
+          </button>
+        </div>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+
+function orderVendor(i) {
+  const qtyInput = document.getElementById(`qty-${i}`);
+  const inventoryTypeSelect = document.getElementById(`inventoryType-${i}`);
+  const qty = parseInt(qtyInput.value);
+  const inventoryType = inventoryTypeSelect.value;
+
+  if (isNaN(qty) || qty <= 0) {
+    alert('Please enter a valid quantity.');
+    return;
+  }
+  const vendor = vendors[i];
+  const total = vendor.price * qty;
+  const user = getUser ();
+  if (!user) {
+    alert('Please log in to place an order.');
+    return;
+  }
+  if (user.wallet < total) {
+    alert('Insufficient wallet balance. Please add money to your wallet.');
+    return;
+  }
+  user.wallet -= total;
+  // Profit calculation for vendor products: assume 50% profit margin for simplicity
+  user.profit += total * 0.5;
+  user.totalSpent = (user.totalSpent || 0) + total; // Track total spent
+
+  // Store inventory with type
+  user.inventory[vendor.product] = user.inventory[vendor.product] || {};
+  user.inventory[vendor.product][inventoryType] = (user.inventory[vendor.product][inventoryType] || 0) + qty;
+
+  user.orders.unshift({ vendor: vendor.name, product: vendor.product, qty, total, date: new Date().toLocaleString(), inventoryType, cost: vendor.price * qty }); // Add cost for profit tracking
+  user.log.unshift(`-₹${total} for ${qty} ${vendor.product} (${vendor.name}) - Type: ${inventoryType}`); // Add to beginning
+  saveUser (user);
+  updateAll();
+  alert('Order placed successfully!');
+  qtyInput.value = '';
+}
+
+// New Product Management Functions
+function addProduct() {
+  const productName = document.getElementById('newProductName').value.trim();
+  const costPrice = parseFloat(document.getElementById('newProductCostPrice').value);
+  const sellPrice = parseFloat(document.getElementById('newProductSellPrice').value);
+  const initialStock = parseInt(document.getElementById('newProductInitialStock').value);
+  const inventoryType = document.getElementById('newProductInventoryType').value;
+
+  if (!productName || isNaN(costPrice) || costPrice <= 0 || isNaN(sellPrice) || sellPrice <= 0 || isNaN(initialStock) || initialStock < 0) {
+    alert('Please fill all product details correctly. Prices must be positive, stock non-negative.');
+    return;
+  }
+  if (sellPrice <= costPrice) {
+    alert('Selling price must be greater than cost price.');
+    return;
+  }
+
+  const user = getUser();
+  if (!user) {
+    alert('Please log in to add products.');
+    return;
+  }
+
+  if (user.products[productName]) {
+    alert('Product with this name already exists. Please use a different name or update existing stock.');
+    return;
+  }
+
+  user.products[productName] = {
+    costPrice: costPrice,
+    sellPrice: sellPrice,
+    initialStock: initialStock,
+    inventoryType: inventoryType,
+    image: 'https://via.placeholder.com/100/ADD8E6/000000?text=' + productName.charAt(0).toUpperCase() // Placeholder image
+  };
+
+  // Add initial stock to inventory
+  user.inventory[productName] = user.inventory[productName] || {};
+  user.inventory[productName][inventoryType] = (user.inventory[productName][inventoryType] || 0) + initialStock;
+
+  saveUser(user);
+  alert(`${productName} added to your products with ${initialStock} units in stock!`);
+  document.getElementById('newProductName').value = '';
+  document.getElementById('newProductCostPrice').value = '';
+  document.getElementById('newProductSellPrice').value = '';
+  document.getElementById('newProductInitialStock').value = '';
+  loadProducts(); // Refresh product list
+  updateInventory(); // Refresh inventory display
+  updateDashboard(); // Refresh dashboard metrics
+}
+
+function loadProducts() {
+  const productListDiv = document.getElementById('productList');
+  productListDiv.innerHTML = '';
+  const user = getUser();
+  if (!user || Object.keys(user.products).length === 0) {
+    productListDiv.innerHTML = '<p id="noProducts" class="empty-state col-span-full"><i class="fas fa-box-seam"></i><p>No products defined yet.</p></p>';
+    return;
+  }
+
+  for (const productName in user.products) {
+    const product = user.products[productName];
+    const currentStock = user.inventory[productName]?.[product.inventoryType] || 0;
+    const div = document.createElement('div');
+    div.className = 'vendor-card'; // Reusing vendor-card style for product cards
+    div.innerHTML = `
+      <div class="vendor-image-container">
+        <img src="${product.image}" alt="${productName}" />
+      </div>
+      <div class="vendor-info">
+        <h3 class="font-bold text-xl text-gray-900 mb-1">${productName}</h3>
+        <p class="text-gray-700 mb-1">Cost: ₹${product.costPrice} | Sell: ₹${product.sellPrice}</p>
+        <p class="text-gray-600 text-sm mb-2">Stock: ${currentStock} (${product.inventoryType})</p>
+        <button onclick="editProduct('${productName}')" class="btn-primary px-3 py-1 text-sm mt-3"><i class="fas fa-edit"></i>Edit</button>
+        <button onclick="deleteProduct('${productName}')" class="btn-danger px-3 py-1 text-sm mt-3 ml-2"><i class="fas fa-trash"></i>Delete</button>
+      </div>
+    `;
+    productListDiv.appendChild(div);
+  }
+}
+
+function editProduct(productName) {
+  alert(`Editing ${productName}. (Functionality to be implemented: open a modal with product details for editing)`);
+  // For a full implementation, you'd populate the add product form with existing data
+  // or open a dedicated modal for editing.
+}
+
+function deleteProduct(productName) {
+  if (confirm(`Are you sure you want to delete ${productName}? This will also remove it from your inventory.`)) {
+    const user = getUser();
+    if (user) {
+      // Remove from user.products
+      delete user.products[productName];
+      // Remove from user.inventory
+      delete user.inventory[productName];
+      saveUser(user);
+      alert(`${productName} deleted.`);
+      loadProducts();
+      updateInventory();
+      updateDashboard();
+    }
+  }
+}
+
+
+function searchVendor(query) {
+  loadVendors(query);
+}
+
+// Settings Functions
+function saveProfile() {
+  const user = getUser();
+  if (!user) return;
+  user.bizName = document.getElementById('bizName').value;
+  user.bizGST = document.getElementById('bizGST').value;
+  user.bizContact = document.getElementById('bizContact').value;
+  saveUser(user);
+  alert('Business profile saved!');
+}
+
+function changePassword() {
+  const user = getUser();
+  if (!user) return;
+  const currentPass = document.getElementById('currentPassword').value;
+  const newPass = document.getElementById('newPassword').value;
+  const confirmNewPass = document.getElementById('confirmNewPassword').value;
+
+  if (currentPass !== user.password) {
+    alert('Current password is incorrect.');
+    return;
+  }
+  if (newPass.length < 6) {
+    alert('New password must be at least 6 characters.');
+    return;
+  }
+  if (newPass !== confirmNewPass) {
+    alert('New password and confirmation do not match.');
+    return;
+  }
+
+  user.password = newPass;
+  saveUser(user);
+  alert('Password changed successfully!');
+  document.getElementById('currentPassword').value = '';
+  document.getElementById('newPassword').value = '';
+  document.getElementById('confirmNewPassword').value = '';
+}
+
+function deleteAccount() {
+  if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+    const currentUserEmail = localStorage.getItem('currentUser');
+    if (currentUserEmail) {
+      localStorage.removeItem(currentUserEmail);
+      logout(); // Log out and reload to clear session
+      alert('Account deleted successfully.');
+    }
+  }
+}
+
+function toggleNotification(type) {
+  const checkbox = document.getElementById(`notif${type.charAt(0).toUpperCase() + type.slice(1)}`);
+  alert(`Notifications for ${type} turned ${checkbox.checked ? 'ON' : 'OFF'}`);
+  // In a real app, you'd save this preference to localStorage or a backend
+}
+
+function showFAQ() {
+  alert('FAQ Section: This would open a modal or navigate to a page with frequently asked questions.');
+}
+
+function contactSupport() {
+  alert('Contact Support: This would open a contact form or provide support contact details.');
+}
+
+
+if (localStorage.getItem('currentUser')) {
+  loadApp();
+} else if (localStorage.getItem('remember') === 'true' && localStorage.getItem('currentUser')) {
+    loadApp();
+}
+</script>
+
+</body>
+</html>
